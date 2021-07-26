@@ -3,11 +3,11 @@ package com.codecool.polishdraughts;
 public class Pawn {
 
     public static class Color {
-        String black = "black";
-        String white = "white";
+        String black = "⚪";
+        String white = "⚫";
 
         public String getColor(String color) {
-            return color.equals("black") ? "⚪" : "⚫";
+            return color.equals("black") ? black : white;
         }
     }
 
