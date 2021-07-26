@@ -9,16 +9,6 @@ public class Pawn {
         this.field = new Coordinates(row, col);
     }
 
-    public static class Coordinates {
-        int row;
-        int column;
-
-        public Coordinates(int row, int column) {
-            this.row = row;
-            this.column = column;
-        }
-    }
-
     public String getColor() {
         return color;
     }

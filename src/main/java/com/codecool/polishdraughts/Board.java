@@ -2,16 +2,19 @@ package com.codecool.polishdraughts;
 
 
 public class Board {
-    Pawn[][] board ;
+    private Pawn[][] board;
 
-    public void initBoard(int coordinates){
+    public Board(int boardSize) {
+        this.board = new Pawn[boardSize][boardSize];
+    }
 
+    public void initBoard(Board board){
     }
 
     public Pawn[][] getBoard(){
         return board;
     }
 
-    public void setInitBoard(int coordinates) {
+    public void setBoard() {
     }
 }
