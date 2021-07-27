@@ -21,6 +21,10 @@ public class Game {
         }
     }
 
+    private void setActivePlayer() {
+        activePlayer = activePlayer == 1 ? 2 : 1;
+    }
+
     public void printBoard(Board board) {
         StringBuilder output = new StringBuilder();
         String tableHeader = createTableHeader(board.getBoard().length);
@@ -48,6 +52,7 @@ public class Game {
 
     private String createTableHeader(int boardSize) {
         StringBuilder tableHeader = new StringBuilder();
+        tableHeader.append("Player ").append(activePlayer).append("'s turn!\n");
         tableHeader.append("    ");
         for (int index = 0; index < boardSize; index++) {
             tableHeader.append(alphabetString.charAt(index)).append("   ");
