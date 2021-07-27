@@ -43,7 +43,13 @@ public class Board {
 
 
     public String toString(int[] coordinates) {
-        return "hello";
+        String coordinate = null;
+        int row = coordinates[0];
+        int column = coordinates[1];
+        String columnLetter= String.valueOf(alphabetString.charAt(column));
+        String rowNumber = String.valueOf(row);
+        coordinate = columnLetter + rowNumber;
+        return coordinate;
     }
 
     public int[] toCoordinates(String coordinates) {
