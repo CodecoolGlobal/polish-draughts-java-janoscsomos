@@ -3,6 +3,8 @@ package com.codecool.polishdraughts;
 public class Game {
 
     String alphabetString = "abcdefghijklmnopqrstuvwxyz".toUpperCase();
+    int player1Pawns = 0;
+    int player2Pawns = 0;
 
     public void play(int boardSize) {
         Board board = new Board(boardSize);
@@ -19,10 +21,14 @@ public class Game {
             for (int column = 0; column < board.getBoard().length; column++) {
                 if (board.getBoard()[row][column] == null) output.append("|_").append("__");
                 else {
-                    if (board.getBoard()[row][column].getColor().equals("black"))
+                    if (board.getBoard()[row][column].getColor().equals("black")) {
                         output.append("|_").append("⚪_");
-                    else
+                        player2Pawns++;
+                    }
+                    else {
                         output.append("|_").append("⚫_");
+                        player1Pawns++;
+                    }
                 }
             }
             output.append("|\n");

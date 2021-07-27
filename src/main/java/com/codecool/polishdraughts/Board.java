@@ -32,4 +32,10 @@ public class Board {
 
     public void setBoard() {
     }
+    
+    public String toString(int[] coordinates) {
+    }
+
+    public int[] toCoordinates(String coordinates) {
+    }
 }
