@@ -15,7 +15,7 @@ public class Game {
             printBoard(board);
             playRound();
             if (checkForWinner()){
-                printResults();
+                printResults(board);
             }
             setActivePlayer();
         }
@@ -23,6 +23,11 @@ public class Game {
 
     private void setActivePlayer() {
         activePlayer = activePlayer == 1 ? 2 : 1;
+    }
+    private void printResults(Board board){
+        printBoard(board);
+        System.out.println("Player" + activePlayer+ "won!");
+        System.exit(0);
     }
 
     public void printBoard(Board board) {
