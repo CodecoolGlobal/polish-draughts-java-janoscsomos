@@ -26,7 +26,8 @@ public class Game {
     private void setActivePlayer() {
         activePlayer = activePlayer == 1 ? 2 : 1;
     }
-    private void printResults(Board board){
+
+    private void printResults(Board board) {
         printBoard(board);
         String winner = player1Pawns == 0 ? "Player 2 " : "Player 1 ";
         System.out.println(winner + "won!");
@@ -45,8 +46,7 @@ public class Game {
                     if (board.getBoard()[row][column].getColor().equals("black")) {
                         output.append("|_").append("⚪_");
                         player2Pawns++;
-                    }
-                    else {
+                    } else {
                         output.append("|_").append("⚫_");
                         player1Pawns++;
                     }
@@ -79,11 +79,12 @@ public class Game {
 
     public void playRound(Board board) {
         String friendlyColor = activePlayer == 1 ? "black" : "white";
+        String enemyColor = friendlyColor.equals("white") ? "black" : "white";
         int hitDirection = activePlayer == 1 ? -1 : 1;
         int[][] friendlyPawns = getPawns(friendlyColor, board);
         int[][] mustHits;
         int[][] movable;
-        fillCoordinates(friendlyPawns, mustHits, movable);
+        fillCoordinates(friendlyPawns, mustHits, movable, board, hitDirection, enemyColor);
         if (mustHits.length > 0) {
         }
     }
@@ -95,14 +96,25 @@ public class Game {
             for (int column = 0; column < board.getBoard().length; column++) {
                 if (board.getBoard()[row][column] != null &&
                         board.getBoard()[row][column].getColor().equals(friendlyColor)) {
-                    pawnCoos[row] = new int[] {row, column};
+                    pawnCoos[row] = new int[]{row, column};
                 }
             }
         }
         return pawnCoos;
     }
 
-    private void fillCoordinates(int[][] friendlyPawns, int[][] mustHits, int[][] movable) {
-        
+    private void fillCoordinates(int[][] friendlyPawns, int[][] mustHits, int[][] movable,
+                                 Board board, int hitDirection, String enemyColor, String friendlyColor) {
+        for (int coordinates = 0; coordinates < friendlyPawns.length; coordinates++) {
+            try {
+                if (board.getBoard()[friendlyPawns[coordinates][0] + hitDirection][friendlyPawns[coordinates][1] + 1].getColor().equals(enemyColor) ||
+                        board.getBoard()[friendlyPawns[coordinates][0] + hitDirection][friendlyPawns[coordinates][1] - 1].getColor().equals(enemyColor)) {
+                    mustHits[coordinates] = new int[]{friendlyPawns[coordinates][0], friendlyPawns[coordinates][1]};
+                } else if (!board.getBoard()[friendlyPawns[coordinates][0] + hitDirection][friendlyPawns[coordinates][1] + 1].getColor().equals(friendlyColor)) {
+                    movable[coordinates] = new int[]{friendlyPawns[coordinates][0], friendlyPawns[coordinates][1]};
+                }
+            } catch (ArrayIndexOutOfBoundsException ignored) {
+            }
+        }
     }
 }
