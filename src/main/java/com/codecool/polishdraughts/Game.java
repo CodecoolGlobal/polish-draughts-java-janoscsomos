@@ -1,5 +1,7 @@
 package com.codecool.polishdraughts;
 
+import java.util.Arrays;
+
 public class Game {
 
     String alphabetString = "abcdefghijklmnopqrstuvwxyz".toUpperCase();
@@ -12,16 +14,16 @@ public class Game {
         board.initBoard(board);
         //Pawn toMove = board.getBoard()[6][0];
         //board.movePawn(toMove, 5, 1);
-        while (true) {
-            clear();
-            printBoard(board);
-            playRound(board);
-            if (checkForWinner(player1Pawns, player2Pawns)) {
-                printResults(board);
-            }
-            setActivePlayer();
+        //while (true) {
+        clear();
+        printBoard(board);
+        playRound(board);
+        if (checkForWinner(player1Pawns, player2Pawns)) {
+            printResults(board);
         }
-    }
+        setActivePlayer();
+        }
+
 
     private void setActivePlayer() {
         activePlayer = activePlayer == 1 ? 2 : 1;
@@ -78,25 +80,34 @@ public class Game {
     }
 
     public void playRound(Board board) {
-        String friendlyColor = activePlayer == 1 ? "black" : "white";
+        StringBuilder output = new StringBuilder();
+        String friendlyColor = activePlayer == 1 ? "white" : "black";
         String enemyColor = friendlyColor.equals("white") ? "black" : "white";
-        int hitDirection = activePlayer == 1 ? -1 : 1;
+        int hitDirection = activePlayer == 1 ? 1 : -1;
         int[][] friendlyPawns = getPawns(friendlyColor, board);
-        int[][] mustHits;
-        int[][] movable;
-        fillCoordinates(friendlyPawns, mustHits, movable, board, hitDirection, enemyColor);
+        int[][] mustHits = new int[100][2];
+        int[][] movable = new int[100][2];
+
+        fillCoordinates(friendlyPawns, mustHits, movable, board, hitDirection, enemyColor, friendlyColor);
+        System.out.println(Arrays.deepToString(mustHits));
+        System.out.println(Arrays.deepToString(movable));
         if (mustHits.length > 0) {
+            for (int[] coordinate : mustHits) {
+                output.append(board.toString(coordinate));
+            }
         }
     }
 
     private int[][] getPawns(String friendlyColor, Board board) {
         int counter = activePlayer == 1 ? player1Pawns : player2Pawns;
         int[][] pawnCoos = new int[counter][2];
+        int pawnCounter = 0;
         for (int row = 0; row < board.getBoard().length; row++) {
             for (int column = 0; column < board.getBoard().length; column++) {
                 if (board.getBoard()[row][column] != null &&
                         board.getBoard()[row][column].getColor().equals(friendlyColor)) {
-                    pawnCoos[row] = new int[]{row, column};
+                    pawnCoos[pawnCounter] = new int[]{row, column};
+                    pawnCounter ++;
                 }
             }
         }
@@ -107,13 +118,21 @@ public class Game {
                                  Board board, int hitDirection, String enemyColor, String friendlyColor) {
         for (int coordinates = 0; coordinates < friendlyPawns.length; coordinates++) {
             try {
+                //System.out.println(board.getBoard()[friendlyPawns[coordinates][0] + hitDirection][friendlyPawns[coordinates][1] + 1]);
+                //System.out.println(board.getBoard()[friendlyPawns[coordinates][0] + hitDirection][friendlyPawns[coordinates][1] - 1]);
                 if (board.getBoard()[friendlyPawns[coordinates][0] + hitDirection][friendlyPawns[coordinates][1] + 1].getColor().equals(enemyColor) ||
                         board.getBoard()[friendlyPawns[coordinates][0] + hitDirection][friendlyPawns[coordinates][1] - 1].getColor().equals(enemyColor)) {
-                    mustHits[coordinates] = new int[]{friendlyPawns[coordinates][0], friendlyPawns[coordinates][1]};
-                } else if (!board.getBoard()[friendlyPawns[coordinates][0] + hitDirection][friendlyPawns[coordinates][1] + 1].getColor().equals(friendlyColor)) {
-                    movable[coordinates] = new int[]{friendlyPawns[coordinates][0], friendlyPawns[coordinates][1]};
+                    System.out.println("if");
+                    movable[coordinates][0] = friendlyPawns[coordinates][0];
+                    movable[coordinates][1] = friendlyPawns[coordinates][1];
+                } else if (board.getBoard()[friendlyPawns[coordinates][0] + hitDirection][friendlyPawns[coordinates][1] + 1] != null
+                || board.getBoard()[friendlyPawns[coordinates][0] + hitDirection][friendlyPawns[coordinates][1] - 1] != null ) {
+                    //System.out.println("elif");
+                    movable[coordinates][0] = friendlyPawns[coordinates][0];
+                    movable[coordinates][1] = friendlyPawns[coordinates][1];
                 }
-            } catch (ArrayIndexOutOfBoundsException ignored) {
+            } catch (ArrayIndexOutOfBoundsException | NullPointerException ignored) {
+                //System.out.println("catch");
             }
         }
     }
