@@ -6,6 +6,7 @@ public class Game {
 
     public void play(int boardSize) {
         Board board = new Board(boardSize);
+        board.initBoard(board);
         printBoard(board);
     }
 
@@ -16,7 +17,13 @@ public class Game {
             output.append(row + 1);
             if (row + 1 < 10) output.append(" ");
             for (int column = 0; column < board.getBoard().length; column++) {
-                output.append("|_").append("_").append("_");
+                if (board.getBoard()[row][column] == null) output.append("|_").append("__");
+                else {
+                    if (board.getBoard()[row][column].getColor().equals("black"))
+                        output.append("|_").append("⚪_");
+                    else
+                        output.append("|_").append("⚫_");
+                }
             }
             output.append("|\n");
         }
