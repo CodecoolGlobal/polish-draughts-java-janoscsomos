@@ -15,9 +15,9 @@ public class Game {
         while (true) {
             clear();
             printBoard(board);
-            //playRound();
+            playRound();
             if (checkForWinner(player1Pawns, player2Pawns)) {
-                //printResults();
+                printResults();
             }
             setActivePlayer();
         }
@@ -68,5 +68,9 @@ public class Game {
 
     public boolean checkForWinner(int player1Counter, int player2Counter) {
         return player1Counter == 0 || player2Counter == 0;
+    }
+
+    public void playRound() {
+
     }
 }
