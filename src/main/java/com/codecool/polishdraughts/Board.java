@@ -35,7 +35,8 @@ public class Board {
         return board;
     }
 
-    public void setBoard() {
+    public void setBoard(Pawn activePawn, int targetRow, int targetColumn) {
+        this.board[targetRow][targetColumn] = activePawn;
     }
 
 
@@ -49,5 +50,19 @@ public class Board {
         int row = Integer.parseInt(coordinates.substring(1))-1;
         int columnNumber = alphabetString.indexOf(coordinates.charAt(0));
         return new int[] {row,columnNumber};
+    }
+
+    public void movePawn(Pawn activePawn, int targetRow, int targetCol) {
+        Coordinates coordinate = activePawn.getField();
+        removePawn(activePawn);
+        coordinate.row = targetRow;
+        coordinate.column = targetCol;
+        activePawn.setField(coordinate);
+        this.setBoard(activePawn, targetRow, targetCol);
+    }
+
+    public void removePawn(Pawn toRemove) {
+        Coordinates coord = toRemove.getField();
+        this.board[coord.row][coord.column] = null;
     }
 }

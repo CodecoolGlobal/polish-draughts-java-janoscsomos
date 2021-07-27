@@ -10,12 +10,14 @@ public class Game {
     public void play(int boardSize) {
         Board board = new Board(boardSize);
         board.initBoard(board);
-        while (true){
+        //Pawn toMove = board.getBoard()[6][0];
+        //board.movePawn(toMove, 5, 1);
+        while (true) {
             clear();
             printBoard(board);
-            playRound();
-            if (checkForWinner()){
-                printResults();
+            //playRound();
+            if (checkForWinner(player1Pawns, player2Pawns)) {
+                //printResults();
             }
             setActivePlayer();
         }
@@ -62,5 +64,9 @@ public class Game {
     public void clear() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
+    }
+
+    public boolean checkForWinner(int player1Counter, int player2Counter) {
+        return player1Counter == 0 || player2Counter == 0;
     }
 }
