@@ -5,11 +5,20 @@ public class Game {
     String alphabetString = "abcdefghijklmnopqrstuvwxyz".toUpperCase();
     int player1Pawns = 0;
     int player2Pawns = 0;
+    int activePlayer = 1;
 
     public void play(int boardSize) {
         Board board = new Board(boardSize);
         board.initBoard(board);
-        printBoard(board);
+        while (true){
+            clear();
+            printBoard(board);
+            playRound();
+            if (checkForWinner()){
+                printResults();
+            }
+            setActivePlayer();
+        }
     }
 
     public void printBoard(Board board) {
@@ -44,5 +53,9 @@ public class Game {
             tableHeader.append(alphabetString.charAt(index)).append("   ");
         }
         return tableHeader.toString();
+    }
+    public void clear() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 }
