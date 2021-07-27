@@ -15,7 +15,7 @@ public class Game {
         while (true) {
             clear();
             printBoard(board);
-            playRound();
+            playRound(board);
             if (checkForWinner(player1Pawns, player2Pawns)) {
                 printResults(board);
             }
@@ -28,7 +28,8 @@ public class Game {
     }
     private void printResults(Board board){
         printBoard(board);
-        System.out.println("Player" + activePlayer+ "won!");
+        String winner = player1Pawns == 0 ? "Player 2 " : "Player 1 ";
+        System.out.println(winner + "won!");
         System.exit(0);
     }
 
@@ -66,6 +67,7 @@ public class Game {
         }
         return tableHeader.toString();
     }
+
     public void clear() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
@@ -75,7 +77,32 @@ public class Game {
         return player1Counter == 0 || player2Counter == 0;
     }
 
-    public void playRound() {
+    public void playRound(Board board) {
+        String friendlyColor = activePlayer == 1 ? "black" : "white";
+        int hitDirection = activePlayer == 1 ? -1 : 1;
+        int[][] friendlyPawns = getPawns(friendlyColor, board);
+        int[][] mustHits;
+        int[][] movable;
+        fillCoordinates(friendlyPawns, mustHits, movable);
+        if (mustHits.length > 0) {
+        }
+    }
 
+    private int[][] getPawns(String friendlyColor, Board board) {
+        int counter = activePlayer == 1 ? player1Pawns : player2Pawns;
+        int[][] pawnCoos = new int[counter][2];
+        for (int row = 0; row < board.getBoard().length; row++) {
+            for (int column = 0; column < board.getBoard().length; column++) {
+                if (board.getBoard()[row][column] != null &&
+                        board.getBoard()[row][column].getColor().equals(friendlyColor)) {
+                    pawnCoos[row] = new int[] {row, column};
+                }
+            }
+        }
+        return pawnCoos;
+    }
+
+    private void fillCoordinates(int[][] friendlyPawns, int[][] mustHits, int[][] movable) {
+        
     }
 }
