@@ -1,7 +1,12 @@
 package com.codecool.polishdraughts;
 
 
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Board {
+    private final String alphabetString = "abcdefghijklmnopqrstuvwxyz".toUpperCase();
     private Pawn[][] board;
 
     public Board(int boardSize) {
@@ -32,10 +37,17 @@ public class Board {
 
     public void setBoard() {
     }
-    
+
+
+
+
     public String toString(int[] coordinates) {
+        return "hello";
     }
 
     public int[] toCoordinates(String coordinates) {
+        int row = Integer.parseInt(coordinates.substring(1))-1;
+        int columnNumber = alphabetString.indexOf(coordinates.charAt(0));
+        return new int[] {row,columnNumber};
     }
 }
