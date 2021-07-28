@@ -14,15 +14,22 @@ public class Game {
 
     public void play(int boardSize) {
         Board board = new Board(boardSize);
+        player1Pawns = boardSize * 2;
+        player2Pawns = boardSize * 2;
         board.initBoard(board);
+        System.out.println(player1Pawns);
+        System.out.println(player2Pawns);
         Pawn toMove = board.getBoard()[6][0];
+        Pawn toMove2 = board.getBoard()[3][5];
         board.movePawn(toMove, 4, 6);
+        board.movePawn(toMove2, 4, 4);
         //while (true) {
         clear();
         printBoard(board);
         playRound(board);
         printBoard(board);
-
+        System.out.println("player 1 :" + player1Pawns);
+        System.out.println("player 2 :" + player2Pawns);
         if (checkForWinner(player1Pawns, player2Pawns)) {
             printResults(board);
         }
@@ -52,10 +59,8 @@ public class Game {
                 else {
                     if (board.getBoard()[row][column].getColor().equals("black")) {
                         output.append("|_").append("⚪_");
-                        player2Pawns++;
                     } else {
                         output.append("|_").append("⚫_");
-                        player1Pawns++;
                     }
                 }
             }
@@ -93,7 +98,69 @@ public class Game {
         List<int[]> movables = new ArrayList<>();
 
         String moveOptions = findMoveOptions(friendlyPawns, enemyColor, hitDirection, board, mustHits, movables);
+        System.out.println(moveOptions);
+        System.out.println(mustHits.size());
+        if (mustHits.size() == 1) {
+            inputPawnChecker(mustHits, movables, moveOptions, board, enemyColor, hitDirection, 0);
+        }
     }
+
+
+    public void inputPawnChecker(List<int[]> mustHits, List<int[]> movables,
+                                 String moveOptions, Board board, String enemyColor, int hitDirection, int index) {
+        int[] startingPoint = mustHits.get(index);
+        System.out.println(Arrays.toString(startingPoint));
+        try {
+            if (board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] + 1].getColor().equals(enemyColor) && !board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] + 1].getColor().equals(enemyColor)) {
+                hit(startingPoint, board, hitDirection, -1);
+                System.out.println("hit left");
+            }
+        } catch (NullPointerException ignored) {
+            System.out.println("hit left catch");
+        }
+        try {
+            if (board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] - 1].getColor().equals(enemyColor) && !board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] - 1].getColor().equals(enemyColor)) {
+                hit(startingPoint, board, hitDirection, -1);
+                System.out.println("hit right");
+            }
+        } catch (NullPointerException ignored) {
+            System.out.println("hit right catch");
+        }
+        try {
+            if (board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] + 1].getColor().equals(enemyColor) && board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] - 1].getColor().equals(enemyColor)) {
+                hitChoice(startingPoint, board, hitDirection);
+                System.out.println("choice");
+            }
+        } catch (NullPointerException ignored) {
+            System.out.println("choice catch");
+        }
+    }
+
+    private void hitChoice(int[] startingPoint, Board board, int hitDirection) {
+        System.out.println("Choose hit direction : left or right !");
+        Scanner hitDown = new Scanner(System.in);
+        String input = hitDown.nextLine();
+        if (input.equals("left")) {
+            hit(startingPoint, board, hitDirection, -1);
+        } else if (input.equals("right")) {
+            hit(startingPoint, board, hitDirection, 1);
+        } else
+            hitChoice(startingPoint, board, hitDirection);
+    }
+
+
+    private void hit(int[] startingPoint, Board board, int hitDirection, int direction) {
+
+        board.movePawn(board.getBoard()[startingPoint[0]][startingPoint[1]],
+                startingPoint[0] + hitDirection * 2, startingPoint[1] + direction * 2);
+        board.removePawn(board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] + direction]);
+        if (activePlayer == 1) {
+            player2Pawns--;
+        } else {
+            player1Pawns--;
+        }
+    }
+
 
     private String findMoveOptions(int[][] friendlyPawns,
                                    String enemyColor,
