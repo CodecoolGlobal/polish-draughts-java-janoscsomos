@@ -98,9 +98,12 @@ public class Game {
         List<int[]> movables = new ArrayList<>();
 
         String moveOptions = findMoveOptions(friendlyPawns, enemyColor, hitDirection, board, mustHits, movables);
-        System.out.println(moveOptions);
+        System.out.println("Pawns you can hit with: " + moveOptions);
         if (mustHits.size() == 1) {
-            if (moveOptions.contains(scanner.nextLine())) inputPawnChecker(mustHits, movables, moveOptions, board, enemyColor, hitDirection, 0);
+            if (moveOptions.contains(scanner.nextLine().toUpperCase()))
+                inputPawnChecker(mustHits, movables, moveOptions, board, enemyColor, hitDirection, 0);
+            else
+                playRound(board);
         }
     }
 
@@ -114,22 +117,19 @@ public class Game {
                     && board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] + 1] == null) {
                 hit(startingPoint, board, hitDirection, -1);
             }
-        } catch (NullPointerException ignored) {
-        }
+        } catch (NullPointerException ignored) {}
         try {
             if (board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] + 1].getColor().equals(enemyColor)
                     && board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] - 1] == null) {
                 hit(startingPoint, board, hitDirection, -1);
             }
-        } catch (NullPointerException ignored) {
-        }
+        } catch (NullPointerException ignored) {}
         try {
             if (board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] + 1].getColor().equals(enemyColor)
                     && board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] - 1].getColor().equals(enemyColor)) {
                 hitChoice(startingPoint, board, hitDirection);
             }
-        } catch (NullPointerException ignored) {
-        }
+        } catch (NullPointerException ignored) {}
     }
 
     private void hitChoice(int[] startingPoint, Board board, int hitDirection) {
@@ -165,7 +165,7 @@ public class Game {
                                    List<int[]> mustHits,
                                    List<int[]> movables) {
         findMustHits(friendlyPawns, enemyColor, hitDirection, board, mustHits);
-        StringBuilder moveOptions = new StringBuilder().append("Pawns you can hit with: ");
+        StringBuilder moveOptions = new StringBuilder();
         if (mustHits.size() > 0) {
             for (int[] coordinates : mustHits) moveOptions.append(board.toString(coordinates)).append(", ");
         } else {
