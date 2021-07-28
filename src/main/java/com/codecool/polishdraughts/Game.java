@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Game {
-
+    Scanner scanner = new Scanner(System.in);
     String alphabetString = "abcdefghijklmnopqrstuvwxyz".toUpperCase();
     int player1Pawns = 0;
     int player2Pawns = 0;
@@ -99,9 +99,8 @@ public class Game {
 
         String moveOptions = findMoveOptions(friendlyPawns, enemyColor, hitDirection, board, mustHits, movables);
         System.out.println(moveOptions);
-        System.out.println(mustHits.size());
         if (mustHits.size() == 1) {
-            inputPawnChecker(mustHits, movables, moveOptions, board, enemyColor, hitDirection, 0);
+            if (moveOptions.contains(scanner.nextLine())) inputPawnChecker(mustHits, movables, moveOptions, board, enemyColor, hitDirection, 0);
         }
     }
 
@@ -109,30 +108,27 @@ public class Game {
     public void inputPawnChecker(List<int[]> mustHits, List<int[]> movables,
                                  String moveOptions, Board board, String enemyColor, int hitDirection, int index) {
         int[] startingPoint = mustHits.get(index);
-        System.out.println(Arrays.toString(startingPoint));
+
         try {
-            if (board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] - 1].getColor().equals(enemyColor) && !board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] - 1].getColor().equals(enemyColor)) {
+            if (board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] - 1].getColor().equals(enemyColor)
+                    && board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] + 1] == null) {
                 hit(startingPoint, board, hitDirection, -1);
-                System.out.println("hit left");
             }
         } catch (NullPointerException ignored) {
-            System.out.println("hit left catch");
         }
         try {
-            if (board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] + 1].getColor().equals(enemyColor) && !board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] + 1].getColor().equals(enemyColor)) {
+            if (board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] + 1].getColor().equals(enemyColor)
+                    && board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] - 1] == null) {
                 hit(startingPoint, board, hitDirection, -1);
-                System.out.println("hit right");
             }
         } catch (NullPointerException ignored) {
-            System.out.println("hit right catch");
         }
         try {
-            if (board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] + 1].getColor().equals(enemyColor) && board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] - 1].getColor().equals(enemyColor)) {
+            if (board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] + 1].getColor().equals(enemyColor)
+                    && board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] - 1].getColor().equals(enemyColor)) {
                 hitChoice(startingPoint, board, hitDirection);
-                System.out.println("choice");
             }
         } catch (NullPointerException ignored) {
-            System.out.println("choice catch");
         }
     }
 
