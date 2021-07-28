@@ -15,7 +15,7 @@ public class Game {
         Board board = new Board(boardSize);
         board.initBoard(board);
         Pawn toMove = board.getBoard()[6][0];
-        board.movePawn(toMove, 4, 2);
+        board.movePawn(toMove, 4, 6);
         //while (true) {
         clear();
         printBoard(board);
@@ -177,7 +177,7 @@ public class Game {
             } catch (IndexOutOfBoundsException | NullPointerException ignored) {
             }
             try {
-                if (board.getBoard()[pawn[0] + hitDirection][pawn[1] + 1].getColor().equals(enemyColor)
+                if (board.getBoard()[pawn[0] + hitDirection][pawn[1] - 1].getColor().equals(enemyColor)
                         && board.getBoard()[pawn[0] + hitDirection * 2][pawn[1] - 2] == null && !contains) {
                     mustHits.add(new int[]{pawn[0], pawn[1]});
                 }
