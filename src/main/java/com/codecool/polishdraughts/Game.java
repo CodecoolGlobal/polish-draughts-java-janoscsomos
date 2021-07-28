@@ -89,13 +89,39 @@ public class Game {
         int[][] movable = new int[100][2];
 
         fillCoordinates(friendlyPawns, mustHits, movable, board, hitDirection, enemyColor, friendlyColor);
-        System.out.println(Arrays.deepToString(mustHits));
-        System.out.println(Arrays.deepToString(movable));
+        //System.out.println(Arrays.deepToString(mustHits));
+        //System.out.println(Arrays.deepToString(movable));
+        System.out.println("valid moves:");
+        System.out.println(Arrays.deepToString(tryToMakeAMove(board.getBoard()[6][2])));
         if (mustHits.length > 0) {
             for (int[] coordinate : mustHits) {
                 output.append(board.toString(coordinate));
             }
         }
+    }
+
+    private int[][] tryToMakeAMove(Pawn activePawn) {
+        Coordinates pawnCoords = activePawn.getField();
+        int pawnRow = pawnCoords.row;
+        int pawnColumn = pawnCoords.column;
+        int[][] validMoves = new int[2][2];
+        int fieldsInFront = -1;
+        //ifnotcrowned new variable with getIsCrowned
+        for (int i = 0; i < 2; i++) {
+            try {
+                if (activePawn.getColor().equals("white")) {
+                    validMoves[i][0] = pawnRow + 1;
+                    validMoves[i][1] = pawnColumn + fieldsInFront;
+                    fieldsInFront += 2;
+                } else {
+                    validMoves[i][0] = pawnRow - 1;
+                    validMoves[i][1] = pawnColumn + fieldsInFront;
+                    fieldsInFront += 2;
+                }
+            } catch (ArrayIndexOutOfBoundsException | NullPointerException ignored) {
+        }
+        }
+        return validMoves;
     }
 
     private int[][] getPawns(String friendlyColor, Board board) {
