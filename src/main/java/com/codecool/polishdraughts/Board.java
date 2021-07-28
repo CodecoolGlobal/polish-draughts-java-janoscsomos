@@ -4,6 +4,7 @@ package com.codecool.polishdraughts;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 
 public class Board {
     private final String alphabetString = "abcdefghijklmnopqrstuvwxyz".toUpperCase();
@@ -41,7 +42,6 @@ public class Board {
 
 
 
-
     public String toString(int[] coordinates) {
         String coordinate = null;
         int row = coordinates[0];
@@ -54,7 +54,7 @@ public class Board {
 
     public int[] toCoordinates(String coordinates) {
         int row = Integer.parseInt(coordinates.substring(1))-1;
-        int columnNumber = alphabetString.indexOf(coordinates.charAt(0));
+        int columnNumber = alphabetString.indexOf(coordinates.toUpperCase().charAt(0));
         return new int[] {row,columnNumber};
     }
 

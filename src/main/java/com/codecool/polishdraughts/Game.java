@@ -1,5 +1,6 @@
 package com.codecool.polishdraughts;
 
+import java.util.Scanner;
 import java.util.Arrays;
 
 public class Game {
@@ -18,6 +19,8 @@ public class Game {
         clear();
         printBoard(board);
         playRound(board);
+        printBoard(board);
+
         if (checkForWinner(player1Pawns, player2Pawns)) {
             printResults(board);
         }
@@ -91,13 +94,36 @@ public class Game {
         fillCoordinates(friendlyPawns, mustHits, movable, board, hitDirection, enemyColor, friendlyColor);
         //System.out.println(Arrays.deepToString(mustHits));
         //System.out.println(Arrays.deepToString(movable));
-        System.out.println("valid moves:");
-        System.out.println(Arrays.deepToString(tryToMakeAMove(board.getBoard()[6][2])));
+        //System.out.println("valid moves:");
+        //System.out.println(Arrays.deepToString(tryToMakeAMove(board.getBoard()[6][2])));
+        Pawn activePawn = getUserInput(board);
+        int[][] movesList = tryToMakeAMove(activePawn);
+        int[] toMove = chooseMove(movesList, board);
+        board.movePawn(activePawn, toMove[0], toMove[1]);
         if (mustHits.length > 0) {
             for (int[] coordinate : mustHits) {
                 output.append(board.toString(coordinate));
             }
         }
+    }
+
+    private Pawn getUserInput(Board board) {
+        Scanner getInput = new Scanner(System.in);
+        System.out.println("Enter coordinates:");
+        String userInput = getInput.nextLine();
+        int[] inputAsCoords = board.toCoordinates(userInput);
+        System.out.println(Arrays.toString(inputAsCoords));
+        Pawn selectedPawn = board.getBoard()[inputAsCoords[0]][inputAsCoords[1]];
+        return selectedPawn;
+    }
+
+    private int[] chooseMove(int[][] availableMoves, Board board) {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Choose from available moves:");
+        System.out.println(board.toString(availableMoves[0]));
+        System.out.println(board.toString(availableMoves[1]));
+        String playerChoice = input.next();
+        return (playerChoice.equals("1")) ? availableMoves[0] : availableMoves[1];
     }
 
     private int[][] tryToMakeAMove(Pawn activePawn) {
