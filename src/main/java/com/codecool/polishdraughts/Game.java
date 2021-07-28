@@ -1,6 +1,8 @@
 package com.codecool.polishdraughts;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Game {
 
@@ -22,7 +24,7 @@ public class Game {
             printResults(board);
         }
         setActivePlayer();
-        }
+    }
 
 
     private void setActivePlayer() {
@@ -85,17 +87,10 @@ public class Game {
         String enemyColor = friendlyColor.equals("white") ? "black" : "white";
         int hitDirection = activePlayer == 1 ? 1 : -1;
         int[][] friendlyPawns = getPawns(friendlyColor, board);
-        int[][] mustHits = new int[100][2];
-        int[][] movable = new int[100][2];
-
-        fillCoordinates(friendlyPawns, mustHits, movable, board, hitDirection, enemyColor, friendlyColor);
-        System.out.println(Arrays.deepToString(mustHits));
-        System.out.println(Arrays.deepToString(movable));
-        if (mustHits.length > 0) {
-            for (int[] coordinate : mustHits) {
-                output.append(board.toString(coordinate));
-            }
-        }
+        List<int[]> mustHits = new ArrayList<>();
+        List<int[]> movables = new ArrayList<>();
+        fillCoordinates(friendlyPawns, mustHits, movables, board, hitDirection, enemyColor, friendlyColor);
+        for (int[] movable : movables) System.out.println(Arrays.toString(movable));
     }
 
     private int[][] getPawns(String friendlyColor, Board board) {
@@ -107,33 +102,33 @@ public class Game {
                 if (board.getBoard()[row][column] != null &&
                         board.getBoard()[row][column].getColor().equals(friendlyColor)) {
                     pawnCoos[pawnCounter] = new int[]{row, column};
-                    pawnCounter ++;
+                    pawnCounter++;
                 }
             }
         }
         return pawnCoos;
     }
 
-    private void fillCoordinates(int[][] friendlyPawns, int[][] mustHits, int[][] movable,
-                                 Board board, int hitDirection, String enemyColor, String friendlyColor) {
-        for (int coordinates = 0; coordinates < friendlyPawns.length; coordinates++) {
+    private void fillCoordinates(int[][] friendlyPawns,
+                                 List<int[]> mustHits,
+                                 List<int[]> movables,
+                                 Board board,
+                                 int hitDirection,
+                                 String enemyColor,
+                                 String friendlyColor) {
+        for (int[] pawn : friendlyPawns) {
+            boolean contains = false;
             try {
-                //System.out.println(board.getBoard()[friendlyPawns[coordinates][0] + hitDirection][friendlyPawns[coordinates][1] + 1]);
-                //System.out.println(board.getBoard()[friendlyPawns[coordinates][0] + hitDirection][friendlyPawns[coordinates][1] - 1]);
-                if (board.getBoard()[friendlyPawns[coordinates][0] + hitDirection][friendlyPawns[coordinates][1] + 1].getColor().equals(enemyColor) ||
-                        board.getBoard()[friendlyPawns[coordinates][0] + hitDirection][friendlyPawns[coordinates][1] - 1].getColor().equals(enemyColor)) {
-                    System.out.println("if");
-                    movable[coordinates][0] = friendlyPawns[coordinates][0];
-                    movable[coordinates][1] = friendlyPawns[coordinates][1];
-                } else if (board.getBoard()[friendlyPawns[coordinates][0] + hitDirection][friendlyPawns[coordinates][1] + 1] != null
-                || board.getBoard()[friendlyPawns[coordinates][0] + hitDirection][friendlyPawns[coordinates][1] - 1] != null ) {
-                    //System.out.println("elif");
-                    movable[coordinates][0] = friendlyPawns[coordinates][0];
-                    movable[coordinates][1] = friendlyPawns[coordinates][1];
+                if (board.getBoard()[pawn[0] + hitDirection][pawn[1] + 1] == null) {
+                    movables.add(new int[]{pawn[0], pawn[1]});
+                    contains = true;
                 }
-            } catch (ArrayIndexOutOfBoundsException | NullPointerException ignored) {
-                //System.out.println("catch");
-            }
+            } catch (IndexOutOfBoundsException ignored) {}
+            try {
+                if (board.getBoard()[pawn[0] + hitDirection][pawn[1] - 1] == null && !contains) {
+                    movables.add(new int[]{pawn[0], pawn[1]});
+                }
+            } catch (IndexOutOfBoundsException ignored) {}
         }
     }
 }
