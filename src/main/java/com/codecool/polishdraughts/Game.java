@@ -111,7 +111,7 @@ public class Game {
         int[] startingPoint = mustHits.get(index);
         System.out.println(Arrays.toString(startingPoint));
         try {
-            if (board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] + 1].getColor().equals(enemyColor) && !board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] + 1].getColor().equals(enemyColor)) {
+            if (board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] - 1].getColor().equals(enemyColor) && !board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] - 1].getColor().equals(enemyColor)) {
                 hit(startingPoint, board, hitDirection, -1);
                 System.out.println("hit left");
             }
@@ -119,7 +119,7 @@ public class Game {
             System.out.println("hit left catch");
         }
         try {
-            if (board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] - 1].getColor().equals(enemyColor) && !board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] - 1].getColor().equals(enemyColor)) {
+            if (board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] + 1].getColor().equals(enemyColor) && !board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] + 1].getColor().equals(enemyColor)) {
                 hit(startingPoint, board, hitDirection, -1);
                 System.out.println("hit right");
             }
