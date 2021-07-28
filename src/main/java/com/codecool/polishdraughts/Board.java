@@ -39,9 +39,6 @@ public class Board {
         this.board[targetRow][targetColumn] = activePawn;
     }
 
-
-
-
     public String toString(int[] coordinates) {
         String coordinate = null;
         int row = coordinates[0];

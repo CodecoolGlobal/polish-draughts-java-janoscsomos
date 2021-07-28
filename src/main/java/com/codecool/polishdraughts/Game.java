@@ -64,8 +64,7 @@ public class Game {
 
     private String createTableHeader(int boardSize) {
         StringBuilder tableHeader = new StringBuilder();
-        tableHeader.append("Player ").append(activePlayer).append("'s turn!\n");
-        tableHeader.append("    ");
+        tableHeader.append("Player ").append(activePlayer).append("'s turn!\n").append("    ");
         for (int index = 0; index < boardSize; index++) {
             tableHeader.append(alphabetString.charAt(index)).append("   ");
         }
@@ -99,7 +98,6 @@ public class Game {
         for (int [] hits : movables){
             System.out.println(Arrays.toString(hits));
         }
-        for (int[] movable : movables) System.out.println(Arrays.toString(movable));
     }
 
     private int[][] tryToMakeAMove(Pawn activePawn) {
@@ -127,8 +125,7 @@ public class Game {
     }
 
     private int[][] getPawns(String friendlyColor, Board board) {
-        int counter = activePlayer == 1 ? player1Pawns : player2Pawns;
-        int[][] pawnCoos = new int[counter][2];
+        int[][] pawnCoos = new int[activePlayer == 1 ? player1Pawns : player2Pawns][2];
         int pawnCounter = 0;
         for (int row = 0; row < board.getBoard().length; row++) {
             for (int column = 0; column < board.getBoard().length; column++) {
@@ -164,7 +161,11 @@ public class Game {
         }
     }
 
-    public void findMustHits(int[][] friendlyPawns, String enemyColor, int hitDirection, Board board, List<int[]> mustHits) {
+    public void findMustHits(int[][] friendlyPawns,
+                             String enemyColor,
+                             int hitDirection,
+                             Board board,
+                             List<int[]> mustHits) {
         for (int[] pawn : friendlyPawns) {
             boolean contains = false;
             try {
@@ -174,7 +175,6 @@ public class Game {
                     contains = true;
                 }
             } catch (IndexOutOfBoundsException | NullPointerException ignored) {
-
             }
             try {
                 if (board.getBoard()[pawn[0] + hitDirection][pawn[1] + 1].getColor().equals(enemyColor)
@@ -182,10 +182,8 @@ public class Game {
                     mustHits.add(new int[]{pawn[0], pawn[1]});
                 }
             } catch (IndexOutOfBoundsException | NullPointerException ignored) {
-
             }
         }
     }
-
 }
 
