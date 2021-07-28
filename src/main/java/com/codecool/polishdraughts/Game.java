@@ -84,23 +84,32 @@ public class Game {
     }
 
     public void playRound(Board board) {
-        StringBuilder output = new StringBuilder();
+
         String friendlyColor = activePlayer == 1 ? "white" : "black";
         String enemyColor = friendlyColor.equals("white") ? "black" : "white";
         int hitDirection = activePlayer == 1 ? 1 : -1;
         int[][] friendlyPawns = getPawns(friendlyColor, board);
         List<int[]> mustHits = new ArrayList<>();
         List<int[]> movables = new ArrayList<>();
+
+        String moveOptions = findMoveOptions(friendlyPawns, enemyColor, hitDirection, board, mustHits, movables);
+    }
+
+    private String findMoveOptions(int[][] friendlyPawns,
+                                   String enemyColor,
+                                   int hitDirection,
+                                   Board board,
+                                   List<int[]> mustHits,
+                                   List<int[]> movables) {
         findMustHits(friendlyPawns, enemyColor, hitDirection, board, mustHits);
-        findMovables(friendlyPawns, movables, board, hitDirection);
-        System.out.println("mustHits:");
-        for (int[] hits : mustHits) {
-            System.out.println(Arrays.toString(hits));
+        StringBuilder moveOptions = new StringBuilder().append("Pawns you can hit with: ");
+        if (mustHits.size() > 0) {
+            for (int[] coordinates : mustHits) moveOptions.append(board.toString(coordinates)).append(", ");
+        } else {
+            findMovables(friendlyPawns, movables, board, hitDirection);
+            for (int[] coordinates : movables) moveOptions.append(board.toString(coordinates)).append(", ");
         }
-        System.out.println("movables:");
-        for (int[] hits : movables) {
-            System.out.println(Arrays.toString(hits));
-        }
+        return moveOptions.substring(0, moveOptions.length() - 2);
     }
 
     private Pawn getUserInput(Board board) {

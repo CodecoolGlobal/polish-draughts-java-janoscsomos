@@ -45,7 +45,7 @@ public class Board {
 
     public String toString(int[] coordinates) {
         String coordinate = null;
-        int row = coordinates[0];
+        int row = coordinates[0] + 1;
         int column = coordinates[1];
         String columnLetter= String.valueOf(alphabetString.charAt(column));
         String rowNumber = String.valueOf(row);
