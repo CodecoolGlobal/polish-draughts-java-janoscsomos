@@ -103,6 +103,6 @@ public class Game {
     }
 
     private void fillCoordinates(int[][] friendlyPawns, int[][] mustHits, int[][] movable) {
-        
+
     }
 }
