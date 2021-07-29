@@ -1,11 +1,5 @@
 package com.codecool.polishdraughts;
 
-
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Locale;
-
 public class Board {
     private final String alphabetString = "abcdefghijklmnopqrstuvwxyz".toUpperCase();
     private Pawn[][] board;
@@ -44,7 +38,7 @@ public class Board {
 
 
     public String toString(int[] coordinates) {
-        String coordinate = null;
+        String coordinate;
         int row = coordinates[0] + 1;
         int column = coordinates[1];
         String columnLetter= String.valueOf(alphabetString.charAt(column));

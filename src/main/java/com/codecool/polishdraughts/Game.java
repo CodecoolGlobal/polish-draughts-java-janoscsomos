@@ -14,15 +14,12 @@ public class Game {
         player1Pawns = boardSize * 2;
         player2Pawns = boardSize * 2;
         board.initBoard(board);
-        System.out.println(player1Pawns);
-        System.out.println(player2Pawns);
         while (true) {
             clear();
             printBoard(board);
             playRound(board);
-            printBoard(board);
-            System.out.println("player 1 :" + player1Pawns);
-            System.out.println("player 2 :" + player2Pawns);
+            System.out.println("Player 1 :" + player1Pawns + " pawns");
+            System.out.println("Player 2 :" + player2Pawns + " pawns");
             if (checkForWinner(player1Pawns, player2Pawns)) {
                 printResults(board);
             }
@@ -39,12 +36,12 @@ public class Game {
         clear();
         printBoard(board);
         if (player1Pawns == player2Pawns) {
-            System.out.println("It's a tie !");
-            System.exit(0);
+            System.out.println("It's a tie!");
+            PolishDraughts.mainMenu();
         }
         String winner = player1Pawns < player2Pawns ? "Player 2 " : "Player 1 ";
         System.out.println(winner + "won!");
-        System.exit(0);
+        PolishDraughts.mainMenu();
     }
 
     public void printBoard(Board board) {
@@ -100,6 +97,10 @@ public class Game {
             if (mustHits.size() > 0) {
                 System.out.println("Pawns you can hit with: " + moveOptions);
                 String startingPoint = scanner.nextLine().toUpperCase();
+                if (startingPoint.equals("EXIT")) {
+                    clear();
+                    PolishDraughts.mainMenu();
+                }
                 if (moveOptions.contains(startingPoint)) {
                     inputPawnChecker(startingPoint, board, enemyColor, hitDirection);
                 } else {
@@ -108,9 +109,13 @@ public class Game {
             } else {
                 System.out.println("Pawns you can move with: " + moveOptions);
                 String playerChoice = scanner.nextLine().toUpperCase();
+                if (playerChoice.equals("EXIT")) {
+                    clear();
+                    PolishDraughts.mainMenu();
+                }
                 if (moveOptions.contains(playerChoice)) {
                     Pawn activePawn = board.getBoard()[board.toCoordinates(playerChoice)[0]][board.toCoordinates(playerChoice)[1]];
-                    tryToMakeAMove(activePawn, board, validMoves);
+                    tryToMakeAMove(activePawn, validMoves);
                     removeInvalidFields(validMoves, board, friendlyColor, enemyColor);
                     int[] newField = chooseMove(validMoves, board);
                     board.movePawn(activePawn, newField[0], newField[1]);
@@ -173,6 +178,10 @@ public class Game {
         if (options.contains("left") && options.contains("right")) {
             System.out.println(options + "!");
             String input = scanner.nextLine();
+            if (input.equals("exit")) {
+                clear();
+                PolishDraughts.mainMenu();
+            }
             if (input.equals("left"))
                 hit(startingPoint, board, hitDirection, -1);
             if (input.equals("right"))
@@ -231,16 +240,6 @@ public class Game {
         return moveOptions.substring(0, moveOptions.length() - 2);
     }
 
-    private Pawn getUserInput(Board board) {
-        Scanner getInput = new Scanner(System.in);
-        System.out.println("Enter coordinates:");
-        String userInput = getInput.nextLine();
-        int[] inputAsCoords = board.toCoordinates(userInput);
-        System.out.println(Arrays.toString(inputAsCoords));
-        Pawn selectedPawn = board.getBoard()[inputAsCoords[0]][inputAsCoords[1]];
-        return selectedPawn;
-    }
-
     private int[] chooseMove(List<int[]> availableMoves, Board board) {
         try {
             Scanner input = new Scanner(System.in);
@@ -255,7 +254,7 @@ public class Game {
         return chooseMove(availableMoves, board);
     }
 
-    private void tryToMakeAMove(Pawn activePawn, Board board, List<int[]> validMoves) {
+    private void tryToMakeAMove(Pawn activePawn, List<int[]> validMoves) {
         int startingRow = activePawn.getField().row;
         int startingCol = activePawn.getField().column;
         if (activePawn.getColor().equals("white")) {
