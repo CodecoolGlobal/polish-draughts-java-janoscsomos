@@ -28,7 +28,7 @@ public class Game {
         board.movePawn(toMove, 4, 8);
         board.movePawn(toMove2, 4, 3);
         board.movePawn(toMove3, 5, 2);
-        board.movePawn(toMove4, 5, 6);
+        board.movePawn(toMove4, 4, 6);
         board.movePawn(toMove5, 5, 0);
         board.movePawn(toMove6, 4, 1);
         //while (true) {
@@ -120,8 +120,6 @@ public class Game {
     public void inputPawnChecker(List<int[]> mustHits, String startingcoordinate,
                                  String moveOptions, Board board, String enemyColor, int hitDirection, int index) {
         int[] startingPoint = board.toCoordinates(startingcoordinate);
-        System.out.println(startingPoint[0]);
-        System.out.println(startingPoint[1]);
         try {
             if (board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] + 1].getColor().equals(enemyColor)
                     && board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] - 1].getColor().equals(enemyColor)) {
@@ -143,15 +141,34 @@ public class Game {
     }
 
     private void hitChoice(int[] startingPoint, Board board, int hitDirection) {
-        System.out.println("Choose hit direction : left or right !");
-        Scanner hitDown = new Scanner(System.in);
-        String input = hitDown.nextLine();
-        if (input.equals("left")) {
+        String options = findOptions(board, hitDirection, startingPoint);
+        if (options.contains("left") && !options.contains("right"))
             hit(startingPoint, board, hitDirection, -1);
-        } else if (input.equals("right")) {
+        if (!options.contains("left") && options.contains("right"))
             hit(startingPoint, board, hitDirection, 1);
-        } else
-            hitChoice(startingPoint, board, hitDirection);
+        if (options.contains("left") && options.contains("right")) {
+            System.out.println(options + "!");
+            String input = scanner.nextLine();
+            if (input.equals("left"))
+                hit(startingPoint, board, hitDirection, -1);
+            if (input.equals("right"))
+                hit(startingPoint, board, hitDirection, 1);
+            if (!input.equals("left") && !input.equals("right"))
+                hitChoice(startingPoint, board, hitDirection);
+        }
+    }
+
+    private String findOptions(Board board, int hitDirection, int[] startingPoint) {
+        String optionsString = "Choose direction: ";
+        if (startingPoint[0] + hitDirection * 2 < board.getBoard().length && startingPoint[0] + hitDirection * 2 > 0 &&
+                startingPoint[1] - 2 < board.getBoard().length && startingPoint[1] - 2 > 0) {
+            optionsString += "left /";
+        }
+        if (startingPoint[0] + hitDirection * 2 < board.getBoard().length && startingPoint[0] + hitDirection * 2 > 0 &&
+                startingPoint[1] + 2 < board.getBoard().length && startingPoint[1] + 2 > 0) {
+            optionsString += " right";
+        }
+        return optionsString;
     }
 
 
