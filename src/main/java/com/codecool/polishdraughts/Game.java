@@ -38,7 +38,7 @@ public class Game {
     private void printResults(Board board) {
         clear();
         printBoard(board);
-        if (player1Pawns == player2Pawns){
+        if (player1Pawns == player2Pawns) {
             System.out.println("It's a tie !");
             System.exit(0);
         }
@@ -101,7 +101,7 @@ public class Game {
                 System.out.println("Pawns you can hit with: " + moveOptions);
                 String startingPoint = scanner.nextLine().toUpperCase();
                 if (moveOptions.contains(startingPoint)) {
-                    inputPawnChecker(mustHits, startingPoint, moveOptions, board, enemyColor, hitDirection, 0);
+                    inputPawnChecker(startingPoint, board, enemyColor, hitDirection);
                 } else {
                     playRound(board);
                 }
@@ -119,6 +119,7 @@ public class Game {
                 }
             }
         } catch (NumberFormatException | StringIndexOutOfBoundsException | InputMismatchException error) {
+            drawChecker(movables, mustHits, board);
             playRound(board);
         }
         drawChecker(movables, mustHits, board);
@@ -130,15 +131,15 @@ public class Game {
         }
     }
 
-    public void inputPawnChecker(List<int[]> mustHits, String startingcoordinate,
-                                 String moveOptions, Board board, String enemyColor, int hitDirection, int index) {
-        int[] startingPoint = board.toCoordinates(startingcoordinate);
+    public void inputPawnChecker(String startingCoordinate, Board board, String enemyColor, int hitDirection) {
+        int[] startingPoint = board.toCoordinates(startingCoordinate);
         try {
-            if (board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] + 1].getColor().equals(enemyColor)
-                    && board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] - 1].getColor().equals(enemyColor)) {
-                hitChoice(startingPoint, board, hitDirection);
+            if (insideBoard(board, startingPoint, hitDirection)) {
+                if (bothHitsAvailable(board, startingPoint, hitDirection, enemyColor)) {
+                    hitChoice(startingPoint, board, hitDirection);
+                }
             }
-        } catch (NullPointerException | IndexOutOfBoundsException ignored) {
+        } catch (NullPointerException ignored) {
         }
         try {
             if (board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] - 1].getColor().equals(enemyColor)) {
@@ -154,12 +155,21 @@ public class Game {
         }
     }
 
+    private boolean bothHitsAvailable(Board board, int[] startingPoint, int hitDirection, String enemyColor) {
+        return board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] + 1].getColor().equals(enemyColor)
+                && board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] - 1].getColor().equals(enemyColor)
+                && board.getBoard()[startingPoint[0] + hitDirection * 2][startingPoint[1] + 2] == null
+                && board.getBoard()[startingPoint[0] + hitDirection * 2][startingPoint[1] - 2] == null;
+    }
+
+    private boolean insideBoard(Board board, int[] startingPoint, int hitDirection) {
+        return startingPoint[0] + hitDirection * 2 < board.getBoard().length && startingPoint[0] + hitDirection * 2 > 0
+                && startingPoint[1] + 2 < board.getBoard().length && startingPoint[1] - 2 > 0;
+    }
+
     private void hitChoice(int[] startingPoint, Board board, int hitDirection) {
         String options = findOptions(board, hitDirection, startingPoint);
-        if (options.contains("left") && !options.contains("right"))
-            hit(startingPoint, board, hitDirection, -1);
-        if (!options.contains("left") && options.contains("right"))
-            hit(startingPoint, board, hitDirection, 1);
+        autoHit(options, startingPoint, board, hitDirection);
         if (options.contains("left") && options.contains("right")) {
             System.out.println(options + "!");
             String input = scanner.nextLine();
@@ -170,6 +180,13 @@ public class Game {
             if (!input.equals("left") && !input.equals("right"))
                 hitChoice(startingPoint, board, hitDirection);
         }
+    }
+
+    private void autoHit(String options, int[] startingPoint, Board board, int hitDirection) {
+        if (options.contains("left") && !options.contains("right"))
+            hit(startingPoint, board, hitDirection, -1);
+        if (!options.contains("left") && options.contains("right"))
+            hit(startingPoint, board, hitDirection, 1);
     }
 
     private String findOptions(Board board, int hitDirection, int[] startingPoint) {
