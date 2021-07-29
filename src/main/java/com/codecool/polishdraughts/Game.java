@@ -38,7 +38,11 @@ public class Game {
     private void printResults(Board board) {
         clear();
         printBoard(board);
-        String winner = player1Pawns == 0 ? "Player 2 " : "Player 1 ";
+        if (player1Pawns == player2Pawns){
+            System.out.println("It's a tie !");
+            System.exit(0);
+        }
+        String winner = player1Pawns < player2Pawns ? "Player 2 " : "Player 1 ";
         System.out.println(winner + "won!");
         System.exit(0);
     }
@@ -84,7 +88,6 @@ public class Game {
     }
 
     public void playRound(Board board) {
-
         String friendlyColor = activePlayer == 1 ? "white" : "black";
         String enemyColor = friendlyColor.equals("white") ? "black" : "white";
         int hitDirection = activePlayer == 1 ? 1 : -1;
@@ -118,8 +121,14 @@ public class Game {
         } catch (NumberFormatException | StringIndexOutOfBoundsException | InputMismatchException error) {
             playRound(board);
         }
+        drawChecker(movables, mustHits, board);
     }
 
+    public void drawChecker(List<int[]> movables, List<int[]> mustHits, Board board) {
+        if (movables.size() == 0 && mustHits.size() == 0) {
+            printResults(board);
+        }
+    }
 
     public void inputPawnChecker(List<int[]> mustHits, String startingcoordinate,
                                  String moveOptions, Board board, String enemyColor, int hitDirection, int index) {
