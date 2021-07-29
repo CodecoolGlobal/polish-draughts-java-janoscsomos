@@ -19,10 +19,18 @@ public class Game {
         board.initBoard(board);
         System.out.println(player1Pawns);
         System.out.println(player2Pawns);
-        Pawn toMove = board.getBoard()[6][0];
+        /*Pawn toMove = board.getBoard()[6][0];
         Pawn toMove2 = board.getBoard()[3][5];
-        board.movePawn(toMove, 4, 6);
-        board.movePawn(toMove2, 4, 4);
+        Pawn toMove3 = board.getBoard()[6][2];
+        Pawn toMove4 = board.getBoard()[6][6];
+        Pawn toMove5 = board.getBoard()[6][4];
+        Pawn toMove6 = board.getBoard()[3][3];
+        board.movePawn(toMove, 4, 8);
+        board.movePawn(toMove2, 4, 3);
+        board.movePawn(toMove3, 5, 2);
+        board.movePawn(toMove4, 4, 6);
+        board.movePawn(toMove5, 5, 0);
+        board.movePawn(toMove6, 4, 1);*/
         //while (true) {
         clear();
         printBoard(board);
@@ -102,8 +110,9 @@ public class Game {
         String moveOptions = findMoveOptions(friendlyPawns, enemyColor, hitDirection, board, mustHits, movables);
         if (mustHits.size() > 0) {
             System.out.println("Pawns you can hit with: " + moveOptions);
-            if (moveOptions.contains(scanner.nextLine().toUpperCase())) {
-                inputPawnChecker(mustHits, movables, moveOptions, board, enemyColor, hitDirection, 0);
+            String startingPoint = scanner.nextLine().toUpperCase();
+            if (moveOptions.contains(startingPoint)) {
+                inputPawnChecker(mustHits, startingPoint, moveOptions, board, enemyColor, hitDirection, 0);
             } else {
                 playRound(board);
             }
