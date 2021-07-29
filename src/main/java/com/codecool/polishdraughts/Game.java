@@ -95,39 +95,47 @@ public class Game {
         try {
             String moveOptions = findMoveOptions(friendlyPawns, enemyColor, hitDirection, board, mustHits, movables);
             if (mustHits.size() > 0) {
-                System.out.println("Pawns you can hit with: " + moveOptions);
-                String startingPoint = scanner.nextLine().toUpperCase();
-                if (startingPoint.equals("EXIT")) {
-                    clear();
-                    PolishDraughts.mainMenu();
-                }
-                if (moveOptions.contains(startingPoint)) {
-                    inputPawnChecker(startingPoint, board, enemyColor, hitDirection);
-                } else {
-                    playRound(board);
-                }
+                hittingPhase(moveOptions, board, enemyColor, hitDirection);
             } else {
-                System.out.println("Pawns you can move with: " + moveOptions);
-                String playerChoice = scanner.nextLine().toUpperCase();
-                if (playerChoice.equals("EXIT")) {
-                    clear();
-                    PolishDraughts.mainMenu();
-                }
-                if (moveOptions.contains(playerChoice)) {
-                    Pawn activePawn = board.getBoard()[board.toCoordinates(playerChoice)[0]][board.toCoordinates(playerChoice)[1]];
-                    tryToMakeAMove(activePawn, validMoves);
-                    removeInvalidFields(validMoves, board, friendlyColor, enemyColor);
-                    int[] newField = chooseMove(validMoves, board);
-                    board.movePawn(activePawn, newField[0], newField[1]);
-                } else {
-                    playRound(board);
-                }
+                movingPhase(moveOptions, board, validMoves, friendlyColor, enemyColor);
             }
         } catch (NumberFormatException | StringIndexOutOfBoundsException | InputMismatchException error) {
             drawChecker(movables, mustHits, board);
             playRound(board);
         }
         drawChecker(movables, mustHits, board);
+    }
+
+    private void movingPhase(String moveOptions, Board board, List<int[]> validMoves, String friendlyColor, String enemyColor) {
+        System.out.println("Pawns you can move with: " + moveOptions);
+        String playerChoice = scanner.nextLine().toUpperCase();
+        if (playerChoice.equals("EXIT")) {
+            clear();
+            PolishDraughts.mainMenu();
+        }
+        if (moveOptions.contains(playerChoice)) {
+            Pawn activePawn = board.getBoard()[board.toCoordinates(playerChoice)[0]][board.toCoordinates(playerChoice)[1]];
+            tryToMakeAMove(activePawn, validMoves);
+            removeInvalidFields(validMoves, board, friendlyColor, enemyColor);
+            int[] newField = chooseMove(validMoves, board);
+            board.movePawn(activePawn, newField[0], newField[1]);
+        } else {
+            playRound(board);
+        }
+    }
+
+    public void hittingPhase(String moveOptions, Board board, String enemyColor, int hitDirection) {
+        System.out.println("Pawns you can hit with: " + moveOptions);
+        String startingPoint = scanner.nextLine().toUpperCase();
+        if (startingPoint.equals("EXIT")) {
+            clear();
+            PolishDraughts.mainMenu();
+        }
+        if (moveOptions.contains(startingPoint)) {
+            inputPawnChecker(startingPoint, board, enemyColor, hitDirection);
+        } else {
+            playRound(board);
+        }
     }
 
     public void drawChecker(List<int[]> movables, List<int[]> mustHits, Board board) {
@@ -182,13 +190,17 @@ public class Game {
                 clear();
                 PolishDraughts.mainMenu();
             }
-            if (input.equals("left"))
-                hit(startingPoint, board, hitDirection, -1);
-            if (input.equals("right"))
-                hit(startingPoint, board, hitDirection, 1);
-            if (!input.equals("left") && !input.equals("right"))
-                hitChoice(startingPoint, board, hitDirection);
+            chooseWhereToHit(input, startingPoint, board, hitDirection);
         }
+    }
+
+    private void chooseWhereToHit(String input, int[] startingPoint, Board board, int hitDirection) {
+        if (input.equals("left"))
+            hit(startingPoint, board, hitDirection, -1);
+        if (input.equals("right"))
+            hit(startingPoint, board, hitDirection, 1);
+        if (!input.equals("left") && !input.equals("right"))
+            hitChoice(startingPoint, board, hitDirection);
     }
 
     private void autoHit(String options, int[] startingPoint, Board board, int hitDirection) {

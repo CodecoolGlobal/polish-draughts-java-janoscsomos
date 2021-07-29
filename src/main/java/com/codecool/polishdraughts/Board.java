@@ -63,7 +63,7 @@ public class Board {
     }
 
     public void removePawn(Pawn toRemove) {
-        Coordinates coord = toRemove.getField();
-        this.board[coord.row][coord.column] = null;
+        Coordinates coordinate = toRemove.getField();
+        this.board[coordinate.row][coordinate.column] = null;
     }
 }

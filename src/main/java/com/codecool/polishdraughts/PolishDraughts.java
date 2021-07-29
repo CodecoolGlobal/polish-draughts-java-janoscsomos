@@ -23,6 +23,8 @@ public class PolishDraughts {
                 }
             } else if (userChoice == 2)
                 System.exit(0);
+            else
+                mainMenu();
         } catch (InputMismatchException error) {
             mainMenu();
         }
