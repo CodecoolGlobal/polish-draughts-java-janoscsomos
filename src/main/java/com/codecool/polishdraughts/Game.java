@@ -99,12 +99,12 @@ public class Game {
 
         String moveOptions = findMoveOptions(friendlyPawns, enemyColor, hitDirection, board, mustHits, movables);
         System.out.println("Pawns you can hit with: " + moveOptions);
-        if (mustHits.size() == 1) {
+        if (mustHits.size() > 0) {
             if (moveOptions.contains(scanner.nextLine().toUpperCase()))
                 inputPawnChecker(mustHits, movables, moveOptions, board, enemyColor, hitDirection, 0);
             else
                 playRound(board);
-        }
+        } else tryToMakeAMove(movables);
     }
 
 
