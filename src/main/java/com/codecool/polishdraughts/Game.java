@@ -50,6 +50,7 @@ public class Game {
     }
 
     private void printResults(Board board) {
+        clear();
         printBoard(board);
         String winner = player1Pawns == 0 ? "Player 2 " : "Player 1 ";
         System.out.println(winner + "won!");
@@ -127,14 +128,12 @@ public class Game {
             }
         } catch (NullPointerException | IndexOutOfBoundsException ignored) {}
         try {
-            if (board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] - 1].getColor().equals(enemyColor)
-                   ) {
+            if (board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] - 1].getColor().equals(enemyColor)) {
                 hit(startingPoint, board, hitDirection, -1);
             }
         } catch (NullPointerException | IndexOutOfBoundsException ignored) {}
         try {
-            if (board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] + 1].getColor().equals(enemyColor)
-                   ) {
+            if (board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] + 1].getColor().equals(enemyColor)) {
                 hit(startingPoint, board, hitDirection, 1);
             }
         } catch (NullPointerException | IndexOutOfBoundsException ignored) {}
@@ -161,13 +160,11 @@ public class Game {
     private String findOptions(Board board, int hitDirection, int[] startingPoint) {
         String optionsString = "Choose direction: ";
         if (startingPoint[0] + hitDirection * 2 < board.getBoard().length && startingPoint[0] + hitDirection * 2 > 0 &&
-                startingPoint[1] - 2 < board.getBoard().length && startingPoint[1] - 2 > 0) {
+                startingPoint[1] - 2 < board.getBoard().length && startingPoint[1] - 2 > 0)
             optionsString += "left /";
-        }
         if (startingPoint[0] + hitDirection * 2 < board.getBoard().length && startingPoint[0] + hitDirection * 2 > 0 &&
-                startingPoint[1] + 2 < board.getBoard().length && startingPoint[1] + 2 > 0) {
+                startingPoint[1] + 2 < board.getBoard().length && startingPoint[1] + 2 > 0)
             optionsString += " right";
-        }
         return optionsString;
     }
 
