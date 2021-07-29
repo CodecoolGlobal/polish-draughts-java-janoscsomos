@@ -21,8 +21,16 @@ public class Game {
         System.out.println(player2Pawns);
         Pawn toMove = board.getBoard()[6][0];
         Pawn toMove2 = board.getBoard()[3][5];
-        board.movePawn(toMove, 4, 6);
-        board.movePawn(toMove2, 4, 4);
+        Pawn toMove3 = board.getBoard()[6][2];
+        Pawn toMove4 = board.getBoard()[6][6];
+        Pawn toMove5 = board.getBoard()[6][4];
+        Pawn toMove6 = board.getBoard()[3][3];
+        board.movePawn(toMove, 4, 8);
+        board.movePawn(toMove2, 4, 3);
+        board.movePawn(toMove3, 5, 2);
+        board.movePawn(toMove4, 5, 6);
+        board.movePawn(toMove5, 5, 0);
+        board.movePawn(toMove6, 4, 1);
         //while (true) {
         clear();
         printBoard(board);
@@ -100,36 +108,38 @@ public class Game {
         String moveOptions = findMoveOptions(friendlyPawns, enemyColor, hitDirection, board, mustHits, movables);
         System.out.println("Pawns you can hit with: " + moveOptions);
         if (mustHits.size() > 0) {
-            if (moveOptions.contains(scanner.nextLine().toUpperCase()))
-                inputPawnChecker(mustHits, movables, moveOptions, board, enemyColor, hitDirection, 0);
+            String startingPoint = scanner.nextLine().toUpperCase();
+            if (moveOptions.contains(startingPoint))
+                inputPawnChecker(mustHits, startingPoint, moveOptions, board, enemyColor, hitDirection, 0);
             else
                 playRound(board);
-        } else tryToMakeAMove(movables);
+        } //else tryToMakeAMove(movables);
     }
 
 
-    public void inputPawnChecker(List<int[]> mustHits, List<int[]> movables,
+    public void inputPawnChecker(List<int[]> mustHits, String startingcoordinate,
                                  String moveOptions, Board board, String enemyColor, int hitDirection, int index) {
-        int[] startingPoint = mustHits.get(index);
-
-        try {
-            if (board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] - 1].getColor().equals(enemyColor)
-                    && board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] + 1] == null) {
-                hit(startingPoint, board, hitDirection, -1);
-            }
-        } catch (NullPointerException ignored) {}
-        try {
-            if (board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] + 1].getColor().equals(enemyColor)
-                    && board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] - 1] == null) {
-                hit(startingPoint, board, hitDirection, -1);
-            }
-        } catch (NullPointerException ignored) {}
+        int[] startingPoint = board.toCoordinates(startingcoordinate);
+        System.out.println(startingPoint[0]);
+        System.out.println(startingPoint[1]);
         try {
             if (board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] + 1].getColor().equals(enemyColor)
                     && board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] - 1].getColor().equals(enemyColor)) {
                 hitChoice(startingPoint, board, hitDirection);
             }
-        } catch (NullPointerException ignored) {}
+        } catch (NullPointerException | IndexOutOfBoundsException ignored) {}
+        try {
+            if (board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] - 1].getColor().equals(enemyColor)
+                   ) {
+                hit(startingPoint, board, hitDirection, -1);
+            }
+        } catch (NullPointerException | IndexOutOfBoundsException ignored) {}
+        try {
+            if (board.getBoard()[startingPoint[0] + hitDirection][startingPoint[1] + 1].getColor().equals(enemyColor)
+                   ) {
+                hit(startingPoint, board, hitDirection, 1);
+            }
+        } catch (NullPointerException | IndexOutOfBoundsException ignored) {}
     }
 
     private void hitChoice(int[] startingPoint, Board board, int hitDirection) {
